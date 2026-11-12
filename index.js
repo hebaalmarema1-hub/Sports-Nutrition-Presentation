@@ -93,9 +93,9 @@ slide.addShape(pptx.ShapeType.rect, {
 
 // الشعارات الرسمية
 const logos = [
-  ["IMG4947.png", 0.8],
-  ["IMG4946.png", 2.25],
-  ["IMG4945.png", 3.7]
+  ["IMG_4947.png", 0.8],
+  ["IMG_4946.png", 2.25],
+  ["IMG_4945.png", 3.7]
 ];
 
 for (const [filename, x] of logos) {
@@ -211,7 +211,7 @@ slide.addShape(pptx.ShapeType.roundRect, {
 
 addImageIfExists(
   slide,
-  "IMG4936.png",
+ "IMG_4936.png"
   8.55,
   1.35,
   3.65,
