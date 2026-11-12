@@ -197,13 +197,25 @@ addText(
     align: "center"
   }
 );
-
 // صورة الدكتورة
 slide.addShape(pptx.ShapeType.roundRect, {
   x: 8.45,
   y: 1.25,
   w: 3.85,
   h: 4.45,
+  rectRadius: 0.12,
+  line: { color: C.gold, width: 2.5 },
+  fill: { color: C.white }
+});
+
+addImageIfExists(
+  slide,
+  "IMG_4936.png",
+  8.55,
+  1.35,
+  3.65,
+  4.25
+);
   rectRadius: 0.12,
   line: { color: C.gold, width: 2.5 },
   fill: { color: C.white }
