@@ -1,0 +1,12 @@
+{
+  "name": "sports-nutrition-presentation",
+  "version": "1.0.0",
+  "description": "A professional animated PowerPoint presentation about Sports Nutrition and Athletic Performance.",
+  "main": "index.js",
+  "scripts": {
+    "build": "node index.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}
