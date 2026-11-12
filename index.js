@@ -264,6 +264,113 @@ addText(
 );
 
 // إنشاء ملف PowerPoint
+// ==============================
+// الشريحة الثانية: مفهوم التغذية الرياضية
+// ==============================
+
+const slide2 = pptx.addSlide();
+
+slide2.background = { color: C.pale };
+
+// شريط علوي
+slide2.addShape(pptx.ShapeType.rect, {
+  x: 0,
+  y: 0,
+  w: SW,
+  h: 0.16,
+  line: { color: C.cyan, transparency: 100 },
+  fill: { color: C.cyan }
+});
+
+// رقم الشريحة
+addText(slide2, "02", 0.55, 0.45, 1, 0.5, {
+  fontSize: 22,
+  bold: true,
+  color: C.blue
+});
+
+// العنوان
+addText(slide2, "مفهوم التغذية الرياضية", 2.2, 0.55, 10.3, 0.8, {
+  fontSize: 30,
+  bold: true,
+  color: C.navy,
+  align: "right"
+});
+
+// خط زخرفي
+slide2.addShape(pptx.ShapeType.line, {
+  x: 7.2,
+  y: 1.55,
+  w: 5.3,
+  h: 0,
+  line: { color: C.gold, width: 2 }
+});
+
+// التعريف
+addText(
+  slide2,
+  "التغذية الرياضية هي العلم الذي يهتم بتوفير العناصر الغذائية والطاقة اللازمة للرياضيين، بما يتناسب مع طبيعة النشاط البدني وشدته ومدته.",
+  1.1, 2.0, 11.1, 1.5,
+  {
+    fontSize: 23,
+    color: C.navy,
+    bold: true,
+    align: "right",
+    valign: "mid",
+    breakLine: true,
+    margin: 0.15
+  }
+);
+
+// ثلاثة محاور
+const topics = [
+  {
+    x: 0.9,
+    title: "توفير الطاقة",
+    desc: "دعم الجسم بالطاقة اللازمة للنشاط البدني"
+  },
+  {
+    x: 4.85,
+    title: "تحسين الأداء",
+    desc: "المساعدة على رفع الكفاءة البدنية"
+  },
+  {
+    x: 8.8,
+    title: "سرعة الاستشفاء",
+    desc: "دعم تعافي العضلات بعد المجهود"
+  }
+];
+
+for (const item of topics) {
+  slide2.addShape(pptx.ShapeType.roundRect, {
+    x: item.x,
+    y: 4.25,
+    w: 3.55,
+    h: 1.65,
+    rectRadius: 0.12,
+    line: { color: C.gray, width: 1 },
+    fill: { color: C.white }
+  });
+
+  addText(slide2, item.title, item.x + 0.15, 4.55, 3.25, 0.4, {
+    fontSize: 20,
+    bold: true,
+    color: C.blue,
+    align: "center"
+  });
+
+  addText(slide2, item.desc, item.x + 0.2, 5.05, 3.15, 0.55, {
+    fontSize: 14,
+    color: C.navy,
+    align: "center"
+  });
+}
+
+// تذييل
+addText(slide2, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
+  fontSize: 10,
+  color: C.blue
+});
 async function buildPresentation() {
   await pptx.writeFile({
     fileName: "Sports-Nutrition.pptx"
