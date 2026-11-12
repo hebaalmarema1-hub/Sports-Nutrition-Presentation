@@ -2489,107 +2489,85 @@ addText(slide11, "الماء: عنصر أساسي للحفاظ على الترط
 // التذييل
 addText(slide11, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
   fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الثالثة عشرة: الخاتمة والشكر
+  color: C.blue// ==============================
+// الشريحة الثانية عشرة: التوصيات والإرشادات الغذائية
 // ==============================
 
-const slide13 = pptx.addSlide();
+const slide12 = pptx.addSlide();
 
-slide13.background = { color: C.navy };
+slide12.background = { color: C.pale };
 
-// شريط علوي
-slide13.addShape(pptx.ShapeType.rect, {
+// الشريط العلوي
+slide12.addShape(pptx.ShapeType.rect, {
   x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.gold, transparency: 100 },
-  fill: { color: C.gold }
+  line: { color: C.cyan, transparency: 100 },
+  fill: { color: C.cyan }
 });
 
 // رقم الشريحة
-addText(slide13, "13", 0.55, 0.45, 1, 0.5, {
+addText(slide12, "12", 0.55, 0.45, 1, 0.5, {
   fontSize: 22,
   bold: true,
-  color: C.white
-});
-
-// عنوان الخاتمة
-addText(slide13, "الخاتمة", 2.0, 0.85, 9.3, 0.8, {
-  fontSize: 34,
-  bold: true,
-  color: C.gold,
-  align: "center"
-});
-
-// نص الخاتمة
-addText(
-  slide13,
-  "إن تحقيق الأداء الرياضي المتميز لا يعتمد على التدريب وحده، بل يتطلب تكامل التغذية المتوازنة والترطيب الجيد والراحة والاستشفاء.",
-  1.3, 2.0, 10.7, 1.4,
-  {
-    fontSize: 23,
-    bold: true,
-    color: C.white,
-    align: "center",
-    valign: "mid",
-    margin: 0.15
-  }
-);
-
-// عبارة ختامية
-addText(
-  slide13,
-  "التغذية السليمة أساس الأداء الأفضل والحياة الصحية.",
-  1.5, 3.85, 10.3, 0.7,
-  {
-    fontSize: 21,
-    color: C.cyan,
-    bold: true,
-    align: "center"
-  }
-);
-
-// خط زخرفي
-slide13.addShape(pptx.ShapeType.line, {
-  x: 4.0,
-  y: 5.0,
-  w: 5.3,
-  h: 0,
-  line: { color: C.gold, width: 2 }
-});
-
-// الشكر
-addText(
-  slide13,
-  "شكرًا لحُسن استماعكم",
-  1.5, 5.35, 10.3, 0.9,
-  {
-    fontSize: 32,
-    bold: true,
-    color: C.white,
-    align: "center"
-  }
-);
-
-// التذييل
-addText(slide13, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.white
-});
-async function buildPresentation() {
-  await pptx.writeFile({
-    fileName: "Sports-Nutrition.pptx"
-  });
-
-  console.log("Presentation created successfully!");
-}
-
-buildPresentation().catch(console.error);
-// التذييل
-addText(slide11, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
   color: C.blue
 });
+
+// العنوان
+addText(slide12, "التوصيات والإرشادات الغذائية للرياضيين", 1.5, 0.55, 11, 0.8, {
+  fontSize: 28,
+  bold: true,
+  color: C.navy,
+  align: "right"
+});
+
+// مقدمة
+addText(
+  slide12,
+  "لتحقيق أفضل استفادة من النشاط البدني، يُنصح باتباع مجموعة من الإرشادات الغذائية:",
+  1.0, 1.5, 11.2, 0.7,
+  {
+    fontSize: 20,
+    color: C.navy,
+    align: "right",
+    valign: "mid"
+  }
+);
+
+// التوصيات
+const recommendations = [
+  "اتباع نظام غذائي متوازن ومتنوع.",
+  "تناول وجبات مناسبة لاحتياجات الجسم.",
+  "الاهتمام بشرب الماء قبل النشاط وأثناءه وبعده.",
+  "تنظيم توقيت الوجبات بما يتناسب مع التدريب.",
+  "الحرص على تناول مصادر البروتين والكربوهيدرات.",
+  "تجنب استخدام المكملات الغذائية دون استشارة مختص.",
+  "الحصول على قسط كافٍ من الراحة والنوم."
+];
+
+recommendations.forEach((item, index) => {
+  const y = 2.45 + index * 0.58;
+
+  slide12.addShape(pptx.ShapeType.ellipse, {
+    x: 1.15,
+    y: y + 0.08,
+    w: 0.28,
+    h: 0.28,
+    line: { color: C.gold, transparency: 100 },
+    fill: { color: C.gold }
+  });
+
+  addText(slide12, item, 1.65, y, 10.0, 0.45, {
+    fontSize: 17,
+    color: C.navy,
+    align: "right",
+    valign: "mid"
+  });
+});
+
+// التذييل
+addText(slide12, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
+  fontSize: 10,
+  color: C.blue
+});;
 // ==============================
 // الشريحة الثالثة عشرة: الخاتمة والشكر
 // ==============================
