@@ -55,9 +55,7 @@ function addImageIfExists(slide, filename, x, y, w, h) {
   }
 }
 
-// ==============================
 // الشريحة الأولى: الغلاف الرئيسي
-// ==============================
 
 const slide = pptx.addSlide();
 
@@ -197,6 +195,7 @@ addText(
     align: "center"
   }
 );
+
 // صورة الدكتورة
 slide.addShape(pptx.ShapeType.roundRect, {
   x: 8.45,
@@ -211,19 +210,6 @@ slide.addShape(pptx.ShapeType.roundRect, {
 addImageIfExists(
   slide,
   "IMG_4936.png",
-  8.55,
-  1.35,
-  3.65,
-  4.25
-);
-  rectRadius: 0.12,
-  line: { color: C.gold, width: 2.5 },
-  fill: { color: C.white }
-});
-
-addImageIfExists(
-  slide,
- "IMG_4936.png"
   8.55,
   1.35,
   3.65,
