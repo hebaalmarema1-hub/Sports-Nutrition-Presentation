@@ -1,1494 +1,675 @@
-const pptxgen = require("pptxgenjs");
-const path = require("path");
-const fs = require("fs");
+color: C.blue, transparency: 76 },
+    line: { color: C.blue, transparency: 100 }
+  });
 
-const pptx = new pptxgen();
+  const logos = [
+    ["IMG_4947.png", 0.75],
+    ["IMG_4946.png", 2.0],
+    ["IMG_4945.png", 3.25]
+  ];
+  for (const [name, x] of logos) {
+    shape(s, pptx.ShapeType.ellipse, x, 0.48, 0.9, 0.9, C.white, C.white);
+    imageIf(s, name, x + 0.09, 0.57, 0.72, 0.72);
+  }
 
-pptx.layout = "LAYOUT_WIDE";
-pptx.author = "جامعة صبراتة";
-pptx.subject = "التغذية الرياضية والأداء الرياضي";
-pptx.title = "التغذية الرياضية والأداء الرياضي";
-pptx.lang = "ar-LY";
+  txt(s, "دولة ليبيا  |  جامعة صبراتة", 0.65, 1.58, 6.3, 0.38, {
+    fontSize: 17, bold: true, color: C.gold, align: "center"
+  });
+  txt(s, "الدورة التدريبية لمعلمي ومعلمات التربية البدنية بالمنطقة الغربية",
+    0.65, 2.02, 6.3, 0.58, { fontSize: 14, color: "D7E6EC", align: "center" });
 
-pptx.theme = {
-  headFontFace: "Arial",
-  bodyFontFace: "Arial",
-  lang: "ar-LY"
-};
+  line(s, 1.25, 2.86, 6.35, 2.86, C.gold, 1.8);
+  txt(s, "التغذية الرياضية", 0.55, 3.18, 6.7, 0.78, {
+    fontSize: 35, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "والأداء الرياضي", 0.55, 3.93, 6.7, 0.72, {
+    fontSize: 32, bold: true, color: C.cyan, align: "center"
+  });
+  txt(s, "Sports Nutrition and Athletic Performance", 0.6, 4.72, 6.6, 0.38, {
+    fontSize: 15, color: "D2E2E9", align: "center"
+  });
 
-const C = {
-  navy: "10263F",
-  blue: "087EA4",
-  cyan: "35B6D6",
-  white: "FFFFFF",
-  pale: "F4FBFD",
-  gold: "D6B46A",
-  gray: "C7DCE5"
-};
+  // صورة المحاضِرة في إطار أنيق
+  shape(s, pptx.ShapeType.roundRect, 8.15, 0.82, 4.15, 4.78, C.white, C.gold, {
+    line: { color: C.gold, width: 2.2 }, rectRadius: 0.16
+  });
+  imageIf(s, "IMG_4936.png", 8.27, 0.94, 3.91, 4.54);
 
-const SW = 13.333;
-const SH = 7.5;
-const assets = path.join(__dirname, "assets");
-
-function addText(slide, text, x, y, w, h, options = {}) {
-  slide.addText(text, {
-    x, y, w, h,
-    fontFace: "Arial",
-    color: C.white,
-    margin: 0.05,
-    breakLine: false,
-    valign: "mid",
-    ...options
+  txt(s, "إعداد وتقديم", 7.7, 5.75, 5.05, 0.28, {
+    fontSize: 13, bold: true, color: C.gold, align: "center"
+  });
+  txt(s, "الدكتورة مفيدة المختار راشد", 7.55, 6.02, 5.35, 0.38, {
+    fontSize: 19, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "رئيسة قسم العلاج الطبيعي والتأهيل الحركي – الجميل",
+    7.45, 6.39, 5.55, 0.25, { fontSize: 10, color: "D5E3E9", align: "center" });
+  txt(s, "ندوة علمية  |  2026", 0.65, 7.02, 3.2, 0.2, {
+    fontSize: 10, color: C.white, align: "left"
   });
 }
 
-function addImageIfExists(slide, filename, x, y, w, h) {
-  const imagePath = path.join(assets, filename);
+// 02 — مقدمة افتتاحية
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+  topBand(s, C.gold);
+  heading(s, 2, "مدخل إلى التغذية الرياضية",
+    "الأداء الرياضي المتميز يبدأ من تكامل التدريب والتغذية والتعافي.", true);
 
-  if (fs.existsSync(imagePath)) {
-    slide.addImage({
-      path: imagePath,
-      x, y, w, h
+  txt(s, "التدريب يطوّر القدرة… والتغذية تمدّ الجسم بما يحتاجه ليُظهر هذه القدرة.",
+    1.0, 2.0, 11.4, 0.95, {
+      fontSize: 25, bold: true, color: C.white, align: "center", margin: 0.12
     });
-  } else {
-    console.warn("Image not found:", filename);
+
+  const pillars = [
+    { x: 1.05, num: "01", title: "الطاقة", desc: "وقود الحركة والجهد", col: C.cyan },
+    { x: 4.9, num: "02", title: "الأداء", desc: "كفاءة وقوة وتحمل", col: C.gold },
+    { x: 8.75, num: "03", title: "التعافي", desc: "إصلاح واستعادة", col: "75C5A8" }
+  ];
+
+  for (const p of pillars) {
+    shape(s, pptx.ShapeType.roundRect, p.x, 3.65, 3.5, 1.65, C.navy2, "426176", {
+      rectRadius: 0.15
+    });
+    dot(s, p.x + 1.42, 3.28, 0.66, p.col);
+    txt(s, p.num, p.x + 1.45, 3.43, 0.6, 0.25, {
+      fontSize: 13, bold: true, color: C.navy, align: "center"
+    });
+    txt(s, p.title, p.x + 0.2, 4.08, 3.1, 0.42, {
+      fontSize: 22, bold: true, color: p.col, align: "center"
+    });
+    txt(s, p.desc, p.x + 0.2, 4.62, 3.1, 0.32, {
+      fontSize: 14, color: C.white, align: "center"
+    });
   }
+
+  txt(s, "خلال هذه الندوة سنتعرّف كيف نختار الغذاء المناسب، ومتى نتناوله، وكيف ينعكس ذلك على الأداء.",
+    1.0, 5.85, 11.4, 0.55, { fontSize: 17, color: "D7E6EC", align: "center" });
+  footer(s, 2, true);
+}
+1.0, 6.15, 11.2, 0.35, {
+      fontSize: 12, color: C.gray, align: "center"
+    });
+  footer(s, 5);
 }
 
-// الشريحة الأولى: الغلاف الرئيسي
+// 03 — مفهوم التغذية الرياضية
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.pale };
+  topBand(s);
+  heading(s, 3, "مفهوم التغذية الرياضية",
+    "علم يهتم بتوفير احتياجات الجسم الغذائية لدعم النشاط البدني وتحسين الأداء.");
 
-const slide = pptx.addSlide();
-
-slide.background = { color: C.navy };
-
-// خلفية زخرفية
-slide.addShape(pptx.ShapeType.rect, {
-  x: 0,
-  y: 0,
-  w: SW,
-  h: 0.12,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-slide.addShape(pptx.ShapeType.ellipse, {
-  x: 9.1,
-  y: 0.5,
-  w: 4.7,
-  h: 6.5,
-  line: { color: C.blue, transparency: 100 },
-  fill: { color: C.blue, transparency: 75 }
-});
-
-slide.addShape(pptx.ShapeType.rect, {
-  x: 0,
-  y: 6.95,
-  w: SW,
-  h: 0.55,
-  line: { color: C.blue, transparency: 100 },
-  fill: { color: C.blue, transparency: 65 }
-});
-
-// الشعارات الرسمية
-const logos = [
-  ["IMG_4947.png", 0.8],
-  ["IMG_4946.png", 2.25],
-  ["IMG_4945.png", 3.7]
-];
-
-for (const [filename, x] of logos) {
-  slide.addShape(pptx.ShapeType.ellipse, {
-    x,
-    y: 0.45,
-    w: 1.05,
-    h: 1.05,
-    line: { color: C.white, width: 1.5 },
-    fill: { color: C.white }
+  // دائرة مركزية
+  dot(s, 5.35, 2.35, 2.45, C.navy);
+  txt(s, "التغذية", 5.65, 2.9, 1.85, 0.45, {
+    fontSize: 27, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "الرياضية", 5.65, 3.4, 1.85, 0.4, {
+    fontSize: 22, color: C.cyan, align: "center"
   });
 
-  addImageIfExists(
-    slide,
-    filename,
-    x + 0.1,
-    0.55,
-    0.85,
-    0.85
-  );
+  const items = [
+    { x: 0.9, y: 2.35, title: "توفير الطاقة", body: "تلبية احتياجات الجسم أثناء النشاط.", c: C.gold },
+    { x: 9.0, y: 2.35, title: "دعم الأداء", body: "المساعدة على القوة والتحمل والتركيز.", c: C.cyan },
+    { x: 0.9, y: 4.65, title: "تعزيز التعافي", body: "المساهمة في إصلاح الأنسجة واستعادة النشاط.", c: C.green },
+    { x: 9.0, y: 4.65, title: "المحافظة على الصحة", body: "دعم وظائف الجسم والتوازن الغذائي.", c: C.blue }
+  ];
+
+  items.forEach(a => {
+    shape(s, pptx.ShapeType.roundRect, a.x, a.y, 3.35, 1.25, C.white, C.light);
+    shape(s, pptx.ShapeType.rect, a.x + 3.22, a.y + 0.16, 0.05, 0.92, a.c);
+    txt(s, a.title, a.x + 0.18, a.y + 0.17, 2.9, 0.35, {
+      fontSize: 18, bold: true, color: a.c, align: "right"
+    });
+    txt(s, a.body, a.x + 0.18, a.y + 0.62, 2.9, 0.42, {
+      fontSize: 13, color: C.ink, align: "right"
+    });
+  });
+
+  line(s, 4.25, 2.95, 5.4, 3.15, C.gold, 1.6);
+  line(s, 7.75, 3.15, 9.0, 2.95, C.cyan, 1.6);
+  line(s, 4.25, 5.05, 5.65, 4.45, C.green, 1.6);
+  line(s, 7.55, 4.45, 9.0, 5.05, C.blue, 1.6);
+
+  footer(s, 3);
 }
 
-// اسم الجامعة والجهة
-addText(
-  slide,
-  "دولة ليبيا",
-  0.6, 1.75, 6.8, 0.35,
-  {
-    fontSize: 17,
-    bold: true,
-    color: C.gold,
-    align: "center"
-  }
-);
+// 04 — مصادر الطاقة
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.white };
+  topBand(s, C.gold);
+  heading(s, 4, "مصادر الطاقة في الجسم",
+    "يعتمد الجسم على المغذيات لإنتاج الطاقة اللازمة للحركة والجهد البدني.");
 
-addText(
-  slide,
-  "جامعة صبراتة",
-  0.6, 2.12, 6.8, 0.45,
-  {
-    fontSize: 23,
-    bold: true,
-    align: "center"
-  }
-);
+  const data = [
+    { x: 0.9, title: "الكربوهيدرات", en: "Carbohydrates", body: "مصدر مهم للطاقة، خاصة أثناء الأنشطة متوسطة وعالية الشدة.", c: C.gold, pct: "طاقة سريعة ومتاحة" },
+    { x: 4.95, title: "الدهون", en: "Fats", body: "مصدر مهم للطاقة، خاصة أثناء الراحة والأنشطة الطويلة منخفضة الشدة.", c: C.cyan, pct: "مخزون للطاقة" },
+    { x: 9.0, title: "البروتين", en: "Protein", body: "يساهم في بناء الأنسجة وإصلاح العضلات، ويمكن استخدامه للطاقة عند الحاجة.", c: C.green, pct: "بناء وإصلاح" }
+  ];
 
-addText(
-  slide,
-  "الدورة التدريبية لمعلمي ومعلمات التربية البدنية بالمنطقة الغربية",
-  0.6, 2.65, 6.8, 0.65,
-  {
-    fontSize: 14,
-    color: C.gray,
-    align: "center"
-  }
-);
+  data.forEach(a => {
+    shape(s, pptx.ShapeType.roundRect, a.x, 2.15, 3.4, 3.65, C.pale, C.light);
+    dot(s, a.x + 1.22, 2.48, 0.95, a.c);
+    txt(s, a.title === "الكربوهيدرات" ? "C" : a.title === "الدهون" ? "F" : "P",
+      a.x + 1.43, 2.72, 0.55, 0.4, {
+        fontSize: 27, bold: true, color: C.white, align: "center"
+      });
+    txt(s, a.title, a.x + 0.15, 3.65, 3.1, 0.42, {
+      fontSize: 21, bold: true, color: C.navy, align: "center"
+    });
+    txt(s, a.en, a.x + 0.15, 4.12, 3.1, 0.28, {
+      fontSize: 12, color: C.gray, align: "center"
+    });
+    txt(s, a.body, a.x + 0.25, 4.58, 2.9, 0.62, {
+      fontSize: 13, color: C.ink, align: "center", valign: "mid"
+    });
+    txt(s, a.pct, a.x + 0.2, 5.35, 3.0, 0.28, {
+      fontSize: 13, bold: true, color: a.c, align: "center"
+    });
+  });
 
-// الخط الزخرفي
-slide.addShape(pptx.ShapeType.line, {
-  x: 1.6,
-  y: 3.45,
-  w: 4.8,
-  h: 0,
-  line: { color: C.gold, width: 2 }
-});
+  txt(s, "تختلف احتياجات الجسم حسب نوع النشاط ومدته وشدته.",
+    1.0, 6.15, 11.2, 0.35, {
+      fontSize: 16, bold: true, color: C.blue, align: "center"
+    });
+  footer(s, 4);
+}
 
-// عنوان الندوة
-addText(
-  slide,
-  "التغذية الرياضية",
-  0.5, 3.75, 7.1, 0.75,
-  {
-    fontSize: 35,
-    bold: true,
-    color: C.white,
-    align: "center"
-  }
-);
+// 05 — مكونات الوجبة المتوازنة
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.pale };
+  topBand(s);
+  heading(s, 5, "مكونات الوجبة الغذائية المتوازنة",
+    "تنويع الطعام يساعد على توفير العناصر الغذائية التي يحتاجها الجسم.");
 
-addText(
-  slide,
-  "والأداء الرياضي",
-  0.5, 4.5, 7.1, 0.7,
-  {
-    fontSize: 32,
-    bold: true,
-    color: C.cyan,
-    align: "center"
-  }
-);
+  // طبق غذائي توضيحي مقسم بصرياً
+  dot(s, 1.0, 2.0, 3.9, C.light);
+  dot(s, 1.14, 2.14, 3.62, C.white);
+  shape(s, pptx.ShapeType.arc, 1.35, 2.35, 3.2, 3.2, C.green, C.green);
+  shape(s, pptx.ShapeType.pie, 1.28, 2.28, 3.35, 3.35, C.green, C.green, {
+    adjustPoint: 0.5
+  });
+  shape(s, pptx.ShapeType.rect, 2.96, 2.35, 0.04, 3.2, C.white);
+  line(s, 1.4, 4.0, 4.5, 4.0, C.white, 4);
 
-addText(
-  slide,
-  "Sports Nutrition and Athletic Performance",
-  0.5, 5.25, 7.1, 0.4,
-  {
-    fontSize: 16,
-    color: C.gray,
-    align: "center"
-  }
-);
+  txt(s, "½", 1.7, 3.05, 0.9, 0.6, {
+    fontSize: 30, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "¼", 3.25, 2.9, 0.75, 0.5, {
+    fontSize: 25, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "¼", 3.25, 4.35, 0.75, 0.5, {
+    fontSize: 25, bold: true, color: C.white, align: "center"
+  });
 
-// صورة الدكتورة
-slide.addShape(pptx.ShapeType.roundRect, {
-  x: 8.45,
-  y: 1.25,
-  w: 3.85,
-  h: 4.45,
-  rectRadius: 0.12,
-  line: { color: C.gold, width: 2.5 },
-  fill: { color: C.white }
-});
+  const parts = [
+    ["الخضروات والفواكه", "مصدر للفيتامينات والمعادن والألياف.", C.green],
+    ["البروتين", "يدعم بناء العضلات وإصلاح الأنسجة.", C.cyan],
+    ["الحبوب ومصادر النشويات", "تمد الجسم بالطاقة اللازمة للنشاط.", C.gold]
+  ];
 
-addImageIfExists(
-  slide,
-  "IMG_4936.png",
-  8.55,
-  1.35,
-  3.65,
-  4.25
-);
+  parts.forEach((a, i) => {
+    const y = 2.25 + i * 1.3;
+    shape(s, pptx.ShapeType.roundRect, 5.65, y, 6.4, 0.95, C.white, C.light);
+    dot(s, 11.55, y + 0.3, 0.28, a[2]);
+    txt(s, a[0], 6.2, y + 0.12, 5.0, 0.3, {
+      fontSize: 17, bold: true, color: a[2], align: "right"
+    });
+    txt(s, a[1], 6.0, y + 0.52, 5.2, 0.25, {
+      fontSize: 12, color: C.ink, align: "right"
+    });
+  });
 
-// بيانات مقدمة الندوة
-addText(
-  slide,
-  "إعداد وتقديم",
-  7.9, 5.85, 4.9, 0.3,
-  {
-    fontSize: 14,
-    color: C.gold,
-    bold: true,
-    align: "center"
-  }
-);
+  txt(s, "هذا تقسيم إرشادي للطبق، وتختلف الكميات حسب احتياجات الفرد.",
+    1.0, 6.25, 11.2, 0.3, {
+      fontSize: 12, color: C.gray, align: "center"
+    });
+  footer(s, 5);
+}
 
-addText(
-  slide,
-  "الدكتورة مفيدة المختار راشد",
-  7.5, 6.15, 5.6, 0.4,
-  {
-    fontSize: 19,
-    bold: true,
-    align: "center"
-  }
-);
+// 06 — أهمية الماء والترطيب
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+  topBand(s, C.cyan);
+  heading(s, 6, "أهمية الماء والترطيب",
+    "الماء عنصر أساسي لتنظيم حرارة الجسم والمحافظة على كفاءة الأداء.", true);
 
-addText(
-  slide,
-  "رئيسة قسم العلاج الطبيعي والتأهيل الحركي – الجميل",
-  7.4, 6.55, 5.8, 0.25,
-  {
-    fontSize: 10,
-    color: C.gray,
-    align: "center"
-  }
-);
+  shape(s, pptx.ShapeType.teardrop, 1.2, 2.3, 2.6, 3.25, C.cyan, C.cyan, {
+    rotate: 180
+  });
+  txt(s, "H₂O", 1.55, 3.48, 1.9, 0.65, {
+    fontSize: 34, bold: true, color: C.white, align: "center"
+  });
 
-// سنة الندوة
-addText(
-  slide,
-  "ندوة علمية | 2026",
-  0.6, 7.08, 4, 0.22,
-  {
-    fontSize: 10,
-    color: C.white,
-    align: "left"
-  }
-);
+  const benefits = [
+    ["تنظيم الحرارة", "يساعد على تبريد الجسم أثناء النشاط.", C.cyan],
+    ["نقل العناصر", "يسهم في نقل المغذيات ودعم الدورة الدموية.", C.gold],
+    ["كفاءة العضلات", "يدعم وظائف العضلات ويحافظ على الأداء.", "75C5A8"]
+  ];
+
+  benefits.forEach((a, i) => {
+    const y = 2.25 + i * 1.25;
+    shape(s, pptx.ShapeType.roundRect, 4.65, y, 7.45, 0.95, C.navy2, "426176");
+    dot(s, 11.45, y + 0.28, 0.3, a[2]);
+    txt(s, a[0], 7.0, y + 0.12, 4.1, 0.32, {
+      fontSize: 19, bold: true, color: a[2], align: "right"
+    });
+    txt(s, a[1], 5.0, y + 0.52, 6.1, 0.25, {
+      fontSize: 13, color: C.white, align: "right"
+    });
+  });
+
+  txt(s, "لا تنتظر الشعور بالعطش حتى تبدأ بشرب الماء.",
+    1.1, 6.05, 11.1, 0.45, {
+      fontSize: 21, bold: true, color: C.gold, align: "center"
+    });
+  footer(s, 6, true);
+}
+
+// 07 — التوقيت الغذائي
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.pale };
+  topBand(s);
+  heading(s, 7, "التوقيت الغذائي حول التمرين",
+    "اختيار الوقت المناسب للوجبات يساعد على الاستعداد والتعافي.");
+
+  const stages = [
+    {
+      x: 0.9, title: "قبل التمرين", time: "قبل النشاط",
+      body: "وجبة مناسبة تحتوي على الكربوهيدرات، مع وقت كافٍ للهضم.",
+      c: C.gold, n: "01"
+    },
+    {
+      x: 4.9, title: "أثناء التمرين", time: "خلال النشاط",
+      body: "الماء بانتظام، وقد يحتاج النشاط الطويل إلى تعويض إضافي للطاقة.",
+      c: C.cyan, n: "02"
+    },
+    {
+      x: 8.9, title: "بعد التمرين", time: "مرحلة التعافي",
+      body: "تعويض السوائل وتناول البروتين والكربوهيدرات حسب الحاجة.",
+      c: C.green, n: "03"
+    }
+  ];
+
+  line(s, 2.0, 3.0, 11.2, 3.0, C.light, 3);
+
+  stages.forEach(a => {
+    dot(s, a.x + 1.05, 2.52, 0.95, a.c);
+    txt(s, a.n, a.x + 1.2, 2.78, 0.65, 0.3, {
+      fontSize: 20, bold: true, color: C.white, align: "center"
+    });
+    shape(s, pptx.ShapeType.roundRect, a.x, 3.75, 3.45, 2.0, C.white, C.light);
+    txt(s, a.title, a.x + 0.15, 4.0, 3.15, 0.42, {
+      fontSize: 21, bold: true, color: a.c, align: "center"
+    });
+    txt(s, a.time, a.x + 0.15, 4.48, 3.15, 0.28, {
+      fontSize: 13, bold: true, color: C.gray, align: "center"
+    });
+    txt(s, a.body, a.x + 0.25, 4.9, 2.95, 0.65, {
+      fontSize: 14, color: C.ink, align: "center"
+    });
+  });
+
+  footer(s, 7);
+}
+
+// 08 — التغذية والتعافي العضلي
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.white };
+  topBand(s, C.green);
+  heading(s, 8, "التغذية والتعافي العضلي",
+    "التعافي جزء من التدريب، وليس مرحلة منفصلة عنه.");
+
+  const steps = [
+    { x: 0.9, n: "1", title: "التمرين", body: "إجهاد العضلات واستهلاك الطاقة", c: C.blue },
+    { x: 4.9, n: "2", title: "التغذية", body: "توفير البروتين والكربوهيدرات", c: C.cyan },
+    { x: 8.9, n: "3", title: "الاستشفاء", body: "إصلاح الأنسجة واستعادة النشاط", c: C.green }
+  ];
+
+  steps.forEach((a, i) => {
+    dot(s, a.x + 1.05, 2.35, 1.05, a.c);
+    txt(s, a.n, a.x + 1.3, 2.62, 0.55, 0.4, {
+      fontSize: 28, bold: true, color: C.white, align: "center"
+    });
+    shape(s, pptx.ShapeType.roundRect, a.x, 3.75, 3.45, 1.55, C.pale, C.light);
+    txt(s, a.title, a.x + 0.15, 3.98, 3.15, 0.4, {
+      fontSize: 21, bold: true, color: a.c, align: "center"
+    });
+    txt(s, a.body, a.x + 0.2, 4.55, 3.05, 0.45, {
+      fontSize: 14, color: C.ink, align: "center"
+    });
+    if (i < 2) {
+      txt(s, "←", a.x + 3.45, 2.7, 0.55, 0.5, {
+        fontSize: 27, bold: true, color: C.gold, align: "center"
+      });
+    }
+  });
+
+  shape(s, pptx.ShapeType.roundRect, 2.0, 5.8, 9.35, 0.55, C.aqua, C.aqua);
+  txt(s, "الغذاء المتوازن + السوائل + النوم الكافي = تعافٍ أفضل",
+    2.2, 5.91, 8.95, 0.3, {
+      fontSize: 17, bold: true, color: C.navy, align: "center"
+    });
+
+  footer(s, 8);
+}
+// 09 — الأخطاء الغذائية الشائعة
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.pale };
+  topBand(s, C.orange);
+  heading(s, 9, "أخطاء غذائية قد تؤثر في الأداء",
+    "بعض العادات اليومية قد تقلل من كفاءة الجسم أثناء النشاط البدني.");
+
+  const mistakes = [
+    {
+      n: "01",
+      title: "تخطي الوجبات",
+      body: "قد يؤدي إلى نقص الطاقة وصعوبة المحافظة على مستوى الأداء.",
+      c: C.orange
+    },
+    {
+      n: "02",
+      title: "قلة شرب الماء",
+      body: "قد تزيد من خطر الجفاف وتؤثر في التركيز والتحمل.",
+      c: C.cyan
+    },
+    {
+      n: "03",
+      title: "الإفراط في المكملات",
+      body: "استخدامها دون حاجة أو إرشاد مختص قد يسبب أضراراً.",
+      c: C.red
+    },
+    {
+      n: "04",
+      title: "إهمال وجبة التعافي",
+      body: "قد يؤخر تعويض السوائل والطاقة والعناصر الغذائية.",
+      c: C.green
+    }
+  ];
+
+  mistakes.forEach((a, i) => {
+    const x = i % 2 === 0 ? 0.95 : 6.85;
+    const y = i < 2 ? 2.2 : 4.25;
+
+    shape(s, pptx.ShapeType.roundRect, x, y, 5.45, 1.55, C.white, C.light);
+    dot(s, x + 4.65, y + 0.28, 0.48, a.c);
+
+    txt(s, a.n, x + 4.72, y + 0.38, 0.34, 0.2, {
+      fontSize: 10, bold: true, color: C.white, align: "center"
+    });
+
+    txt(s, a.title, x + 0.2, y + 0.25, 4.2, 0.35, {
+      fontSize: 19, bold: true, color: a.c, align: "right"
+    });
+
+    txt(s, a.body, x + 0.2, y + 0.78, 4.8, 0.5, {
+      fontSize: 14, color: C.ink, align: "right"
+    });
+  });
+
+  footer(s, 9);
+}
+// 10 — العلاقة بين التغذية والأداء الرياضي
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+  topBand(s, C.gold);
+  heading(s, 10, "العلاقة بين التغذية والأداء الرياضي",
+    "التغذية المناسبة تدعم قدرة الجسم على تقديم أفضل أداء ممكن.", true);
+
+  const factors = [
+    { x: 0.85, title: "الطاقة", value: "Energy", desc: "دعم النشاط البدني", c: C.gold },
+    { x: 3.95, title: "القوة", value: "Strength", desc: "دعم عمل العضلات", c: C.cyan },
+    { x: 7.05, title: "التحمل", value: "Endurance", desc: "المحافظة على الجهد", c: C.green },
+    { x: 10.15, title: "التركيز", value: "Focus", desc: "دعم الانتباه والاستجابة", c: "A9A9F5" }
+  ];
+
+  factors.forEach((a, i) => {
+    dot(s, a.x + 0.42, 2.45, 1.25, a.c);
+    txt(s, String(i + 1).padStart(2, "0"),
+      a.x + 0.7, 2.83, 0.7, 0.35, {
+        fontSize: 22, bold: true, color: C.navy, align: "center"
+      });
+
+    txt(s, a.title, a.x, 4.0, 2.1, 0.4, {
+      fontSize: 21, bold: true, color: a.c, align: "center"
+    });
+    txt(s, a.value, a.x, 4.43, 2.1, 0.25, {
+      fontSize: 11, color: "D7E6EC", align: "center"
+    });
+    txt(s, a.desc, a.x, 4.92, 2.1, 0.45, {
+      fontSize: 13, color: C.white, align: "center"
+    });
+  });
+
+  line(s, 1.5, 5.75, 11.85, 5.75, "426176", 1.3);
+
+  txt(s, "التغذية ليست بديلاً عن التدريب، بل شريك أساسي في تحسين نتائجه.",
+    1.0, 6.05, 11.3, 0.45, {
+      fontSize: 19, bold: true, color: C.gold, align: "center"
+    });
+
+  footer(s, 10, true);
+}
+// 11 — دور معلم التربية البدنية
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.pale };
+  topBand(s, C.cyan);
+  heading(s, 11, "دور معلم التربية البدنية في التوعية الغذائية",
+    "المعلم شريك مهم في ترسيخ السلوكيات الصحية لدى الطلاب.");
+
+  const roles = [
+    {
+      x: 0.85, y: 2.15,
+      title: "تعزيز الوعي الغذائي",
+      body: "توضيح أهمية الغذاء المتوازن وعلاقته بالنشاط البدني.",
+      c: C.blue, n: "01"
+    },
+    {
+      x: 6.85, y: 2.15,
+      title: "تشجيع العادات الصحية",
+      body: "تحفيز الطلاب على اختيار الأطعمة المفيدة والمتنوعة.",
+      c: C.green, n: "02"
+    },
+    {
+      x: 0.85, y: 4.25,
+      title: "التوعية بالترطيب",
+      body: "تذكير الطلاب بشرب الماء وملاحظة علامات الجفاف.",
+      c: C.cyan, n: "03"
+    },
+    {
+      x: 6.85, y: 4.25,
+      title: "ملاحظة التعب والإرهاق",
+      body: "الانتباه إلى علامات الإجهاد وتوجيه الطلاب للممارسات السليمة.",
+      c: C.orange, n: "04"
+    }
+  ];
+
+  roles.forEach(a => {
+    shape(s, pptx.ShapeType.roundRect, a.x, a.y, 5.55, 1.55, C.white, C.light);
+    shape(s, pptx.ShapeType.roundRect, a.x + 4.75, a.y + 0.25, 0.55, 0.55, a.c, a.c);
+    txt(s, a.n, a.x + 4.82, a.y + 0.4, 0.4, 0.2, {
+      fontSize: 11, bold: true, color: C.white, align: "center"
+    });
+    txt(s, a.title, a.x + 0.2, a.y + 0.22, 4.25, 0.4, {
+      fontSize: 18, bold: true, color: a.c, align: "right"
+    });
+    txt(s, a.body, a.x + 0.2, a.y + 0.78, 4.8, 0.45, {
+      fontSize: 13, color: C.ink, align: "right"
+    });
+  });
+
+  footer(s, 11);
+}
+// 12 — وجبة غذائية متوازنة
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.white };
+  topBand(s, C.green);
+  heading(s, 12, "مثال تطبيقي لوجبة غذائية متوازنة",
+    "نموذج يجمع بين مصادر الطاقة والبروتين والخضروات.");
+
+  // صورة طبق توضيحي
+  dot(s, 1.05, 2.0, 4.15, C.light);
+  dot(s, 1.2, 2.15, 3.85, C.pale);
+
+  // أقسام الطبق
+  shape(s, pptx.ShapeType.arc, 1.45, 2.4, 3.35, 3.35, C.green, C.green);
+  shape(s, pptx.ShapeType.pie, 1.35, 2.3, 3.5, 3.5, C.gold, C.gold, {
+    rotate: 90
+  });
+  line(s, 3.1, 2.4, 3.1, 5.65, C.white, 4);
+  line(s, 1.45, 4.05, 4.75, 4.05, C.white, 4);
+
+  txt(s, "خضروات", 1.65, 2.9, 1.2, 0.3, {
+    fontSize: 14, bold: true, color: C.white, align: "center"
+  });
+  txt(s, "حبوب", 3.3, 2.9, 1.0, 0.3, {
+    fontSize: 14, bold: true, color: C.navy, align: "center"
+  });
+  txt(s, "بروتين", 3.25, 4.5, 1.1, 0.3, {
+    fontSize: 14, bold: true, color: C.navy, align: "center"
+  });
+
+  const meal = [
+    {
+      y: 2.15, title: "مصدر البروتين",
+      body: "الدجاج أو السمك أو البيض أو البقوليات.",
+      c: C.blue
+    },
+    {
+      y: 3.25, title: "مصدر الكربوهيدرات",
+      body: "الأرز أو البطاطا أو الخبز كامل الحبوب.",
+      c: C.gold
+    },
+    {
+      y: 4.35, title: "الخضروات والفواكه",
+      body: "توفير الألياف والفيتامينات والمعادن.",
+      c: C.green
+    },
+    {
+      y: 5.45, title: "السوائل",
+      body: "الماء للمحافظة على الترطيب.",
+      c: C.cyan
+    }
+  ];
+
+  meal.forEach(a => {
+    shape(s, pptx.ShapeType.roundRect, 5.55, a.y, 6.55, 0.85, C.pale, C.light);
+    dot(s, 11.55, a.y + 0.27, 0.25, a.c);
+    txt(s, a.title, 6.0, a.y + 0.1, 5.15, 0.28, {
+      fontSize: 16, bold: true, color: a.c, align: "right"
+    });
+    txt(s, a.body, 5.95, a.y + 0.48, 5.2, 0.22, {
+      fontSize: 12, color: C.ink, align: "right"
+    });
+  });
+
+  txt(s, "تُعدّل الكميات ومكونات الوجبة وفق العمر والحالة الصحية ومستوى النشاط.",
+    1.0, 6.45, 11.2, 0.25, {
+      fontSize: 11, color: C.gray, align: "center"
+    });
+
+  footer(s, 12);
+}
+// 13 — توصيات عملية
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+  topBand(s, C.gold);
+  heading(s, 13, "توصيات عملية لتحسين الأداء الرياضي",
+    "خطوات بسيطة تصنع فرقاً في صحة الجسم وكفاءة النشاط.", true);
+
+  const tips = [
+    ["01", "نوّع غذاءك", "احرص على تناول وجبات متوازنة ومتنوعة.", C.cyan],
+    ["02", "اهتم بالترطيب", "اشرب الماء بانتظام قبل النشاط وأثناءه وبعده.", C.gold],
+    ["03", "نظّم وجباتك", "اختر توقيتاً مناسباً للوجبات حول التمرين.", C.green],
+    ["04", "امنح جسمك الراحة", "اهتم بالنوم الكافي والتعافي بعد الجهد.", "A9A9F5],
+    ["05", "كن قدوة صحية", "شجّع الطلاب على اتباع عادات غذائية سليمة.", C.orange]
+  ];
+
+  tips.forEach((a, i) => {
+    const y = 2.0 + i * 0.87;
+
+    dot(s, 10.95, y + 0.08, 0.48, a[3]);
+
+    txt(s, a[0], 11.03, y + 0.2, 0.3, 0.18, {
+      fontSize: 10, bold: true, color: C.navy, align: "center"
+    });
+
+    txt(s, a[1], 7.5, y + 0.05, 3.0, 0.32, {
+      fontSize: 17, bold: true, color: a[3], align: "right"
+    });
+
+    txt(s, a[2], 1.3, y + 0.08, 5.9, 0.3, {
+      fontSize: 14, color: C.white, align: "right"
+    });
+
+    if (i < tips.length - 1) {
+      line(s, 1.3, y + 0.7, 11.5, y + 0.7, "426176", 0.7);
+    }
+  });
+
+  footer(s, 13, true);
+}
+// 14 — الخاتمة
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+
+  shape(s, pptx.ShapeType.rect, 0, 0, SW, 0.14, C.gold);
+  shape(s, pptx.ShapeType.ellipse, 8.8, -1.2, 6.5, 7.8, C.navy2);
+  shape(s, pptx.ShapeType.ellipse, -2.2, 5.1, 5.2, 4.2, C.blue, C.blue, {
+    fill: { color: C.blue, transparency: 75 },
+    line: { color: C.blue, transparency: 100 }
+  });
+
+  txt(s, "التغذية الرياضية والأداء الرياضي",
+    1.0, 1.55, 11.3, 0.7, {
+      fontSize: 30, bold: true, color: C.white, align: "center"
+    });
+
+  line(s, 4.0, 2.55, 9.3, 2.55, C.gold, 2);
+
+  txt(s, "الغذاء المتوازن ليس مجرد احتياج يومي،",
+    1.0, 3.05, 11.3, 0.5, {
+      fontSize: 22, color: "D9E9EF", align: "center"
+    });
+
+  txt(s, "بل هو استثمار في الصحة والطاقة والأداء.",
+    1.0, 3.68, 11.3, 0.55, {
+      fontSize: 25, bold: true, color: C.cyan, align: "center"
+    });
+
+  shape(s, pptx.ShapeType.roundRect, 3.25, 5.0, 6.85, 0.95, C.navy2, "426176");
+  txt(s, "شكراً لحسن استماعكم",
+    3.5, 5.22, 6.35, 0.45, {
+      fontSize: 27, bold: true, color: C.gold, align: "center"
+    });
+
+  txt(s, "إعداد وتقديم الدكتورة مفيدة المختار راشد",
+    2.0, 6.35, 9.3, 0.3, {
+      fontSize: 14, color: C.white, align: "center"
+    });
+
+  footer(s, 14, true);
+}
 
 // إنشاء ملف PowerPoint
-// ==============================
-// الشريحة الثانية: مفهوم التغذية الرياضية
-// ==============================
-
-const slide2 = pptx.addSlide();
-
-slide2.background = { color: C.pale };
-
-// شريط علوي
-slide2.addShape(pptx.ShapeType.rect, {
-  x: 0,
-  y: 0,
-  w: SW,
-  h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide2, "02", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide2, "مفهوم التغذية الرياضية", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// خط زخرفي
-slide2.addShape(pptx.ShapeType.line, {
-  x: 7.2,
-  y: 1.55,
-  w: 5.3,
-  h: 0,
-  line: { color: C.gold, width: 2 }
-});
-
-// التعريف
-addText(
-  slide2,
-  "التغذية الرياضية هي العلم الذي يهتم بتوفير العناصر الغذائية والطاقة اللازمة للرياضيين، بما يتناسب مع طبيعة النشاط البدني وشدته ومدته.",
-  1.1, 2.0, 11.1, 1.5,
-  {
-    fontSize: 23,
-    color: C.navy,
-    bold: true,
-    align: "right",
-    valign: "mid",
-    breakLine: true,
-    margin: 0.15
-  }
-);
-
-// ثلاثة محاور
-const topics = [
-  {
-    x: 0.9,
-    title: "توفير الطاقة",
-    desc: "دعم الجسم بالطاقة اللازمة للنشاط البدني"
-  },
-  {
-    x: 4.85,
-    title: "تحسين الأداء",
-    desc: "المساعدة على رفع الكفاءة البدنية"
-  },
-  {
-    x: 8.8,
-    title: "سرعة الاستشفاء",
-    desc: "دعم تعافي العضلات بعد المجهود"
-  }
-];
-
-for (const item of topics) {
-  slide2.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 4.25,
-    w: 3.55,
-    h: 1.65,
-    rectRadius: 0.12,
-    line: { color: C.gray, width: 1 },
-    fill: { color: C.white }
+pptx.writeFile({ fileName: path.join(__dirname, "Sports-Nutrition.pptx") })
+  .then(() => {
+    console.log("Presentation created successfully: 14 slides");
+  })
+  .catch((err) => {
+    console.error("Error creating presentation:", err);
+    process.exit(1);
   });
-
-  addText(slide2, item.title, item.x + 0.15, 4.55, 3.25, 0.4, {
-    fontSize: 20,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide2, item.desc, item.x + 0.2, 5.05, 3.15, 0.55, {
-    fontSize: 14,
-    color: C.navy,
-    align: "center"
-  });
-}
-
-// تذييل
-addText(slide2, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الثالثة: مصادر الطاقة في الجسم
-// ==============================
-
-const slide3 = pptx.addSlide();
-
-slide3.background = { color: C.white };
-
-// شريط علوي
-slide3.addShape(pptx.ShapeType.rect, {
-  x: 0,
-  y: 0,
-  w: SW,
-  h: 0.16,
-  line: { color: C.blue, transparency: 100 },
-  fill: { color: C.blue }
-});
-
-// رقم الشريحة
-addText(slide3, "03", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide3, "مصادر الطاقة في الجسم", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide3,
-  "يعتمد الجسم على ثلاثة عناصر غذائية رئيسية لإنتاج الطاقة ودعم النشاط البدني:",
-  1.0, 1.65, 11.2, 0.8,
-  {
-    fontSize: 21,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// البطاقات
-const energySources = [
-  {
-    x: 0.8,
-    title: "الكربوهيدرات",
-    desc: "المصدر الأساسي للطاقة أثناء النشاط البدني، وتساعد على تجديد مخزون الجليكوجين في العضلات."
-  },
-  {
-    x: 4.85,
-    title: "الدهون",
-    desc: "مصدر مهم للطاقة، خاصة أثناء الأنشطة البدنية طويلة المدة ومنخفضة إلى متوسطة الشدة."
-  },
-  {
-    x: 8.9,
-    title: "البروتينات",
-    desc: "تساهم في بناء العضلات وإصلاح الأنسجة، ويمكن استخدامها كمصدر للطاقة عند الحاجة."
-  }
-];
-
-for (const item of energySources) {
-  slide3.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 2.5,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.5 },
-    fill: { color: C.pale }
-  });
-
-  addText(slide3, item.title, item.x + 0.15, 3.35, 3.25, 0.5, {
-    fontSize: 22,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide3, item.desc, item.x + 0.25, 4.05, 3.05, 1.1, {
-    fontSize: 16,
-    color: C.navy,
-    align: "center",
-    valign: "mid",
-    breakLine: true,
-    margin: 0.1
-  });
-}
-
-// تذييل
-addText(slide3, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الرابعة: مكونات الغذاء المتوازن
-// ==============================
-
-const slide4 = pptx.addSlide();
-
-slide4.background = { color: C.pale };
-
-// الشريط العلوي
-slide4.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide4, "04", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide4, "مكونات الغذاء المتوازن", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide4,
-  "يحتاج الرياضي إلى تنوع غذائي يضمن حصول الجسم على العناصر الضرورية للطاقة والنمو والتعافي.",
-  1.0, 1.55, 11.2, 0.8,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// مكونات الغذاء
-const foodItems = [
-  {
-    x: 0.8, y: 2.8,
-    title: "الكربوهيدرات",
-    desc: "تمد الجسم بالطاقة اللازمة للنشاط البدني."
-  },
-  {
-    x: 4.85, y: 2.8,
-    title: "البروتينات",
-    desc: "تساعد على بناء العضلات وإصلاح الأنسجة."
-  },
-  {
-    x: 8.9, y: 2.8,
-    title: "الدهون الصحية",
-    desc: "تساهم في توفير الطاقة وامتصاص بعض الفيتامينات."
-  },
-  {
-    x: 2.8, y: 4.8,
-    title: "الفيتامينات والمعادن",
-    desc: "تدعم وظائف الجسم والعضلات والعظام."
-  },
-  {
-    x: 6.85, y: 4.8,
-    title: "الماء",
-    desc: "يحافظ على توازن السوائل وتنظيم حرارة الجسم."
-  }
-];
-
-for (const item of foodItems) {
-  slide4.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: item.y,
-    w: 3.55,
-    h: 1.45,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.2 },
-    fill: { color: C.white }
-  });
-
-  addText(slide4, item.title, item.x + 0.1, item.y + 0.2, 3.35, 0.4, {
-    fontSize: 19,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide4, item.desc, item.x + 0.2, item.y + 0.7, 3.15, 0.55, {
-    fontSize: 14,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// التذييل
-addText(slide4, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الخامسة: أهمية الماء والترطيب
-// ==============================
-
-const slide5 = pptx.addSlide();
-
-slide5.background = { color: C.white };
-
-// الشريط العلوي
-slide5.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide5, "05", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide5, "أهمية الماء والترطيب للرياضي", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide5,
-  "يُعد الماء عنصرًا أساسيًا للحفاظ على كفاءة الجسم أثناء النشاط البدني، ويساعد على تعويض السوائل المفقودة عن طريق التعرق.",
-  1.0, 1.65, 11.2, 1.0,
-  {
-    fontSize: 21,
-    color: C.navy,
-    align: "right",
-    valign: "mid",
-    margin: 0.1
-  }
-);
-
-// فوائد الترطيب
-const hydration = [
-  {
-    x: 0.8,
-    title: "تنظيم حرارة الجسم",
-    desc: "يساعد على تبريد الجسم أثناء المجهود البدني."
-  },
-  {
-    x: 4.85,
-    title: "الحفاظ على الأداء",
-    desc: "يقلل تأثير الجفاف على القوة والتحمل والتركيز."
-  },
-  {
-    x: 8.9,
-    title: "تعويض السوائل",
-    desc: "يعوض الماء والأملاح المفقودة مع التعرق."
-  }
-];
-
-for (const item of hydration) {
-  slide5.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.3,
-    w: 3.55,
-    h: 1.9,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.3 },
-    fill: { color: C.pale }
-  });
-
-  addText(slide5, item.title, item.x + 0.1, 3.65, 3.35, 0.45, {
-    fontSize: 19,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide5, item.desc, item.x + 0.2, 4.25, 3.15, 0.65, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// ملاحظة
-addText(
-  slide5,
-  "يُنصح بشرب الماء بانتظام قبل النشاط البدني وأثناءه وبعده، وفقًا لاحتياجات الجسم وظروف النشاط.",
-  1.0, 5.75, 11.2, 0.65,
-  {
-    fontSize: 18,
-    bold: true,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  }
-);
-
-// التذييل
-addText(slide5, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة السادسة: التوقيت الغذائي
-// ==============================
-
-const slide6 = pptx.addSlide();
-
-slide6.background = { color: C.pale };
-
-// الشريط العلوي
-slide6.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide6, "06", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide6, "التوقيت الغذائي والنشاط البدني", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide6,
-  "لا تقتصر أهمية التغذية على نوع الطعام فقط، بل يشمل ذلك توقيت تناوله بما يتناسب مع النشاط البدني.",
-  1.0, 1.5, 11.2, 0.8,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// مراحل التوقيت الغذائي
-const timing = [
-  {
-    x: 0.8,
-    title: "قبل النشاط",
-    desc: "تناول وجبة متوازنة تحتوي على الكربوهيدرات، مع كمية مناسبة من البروتين، وشرب الماء."
-  },
-  {
-    x: 4.85,
-    title: "أثناء النشاط",
-    desc: "المحافظة على الترطيب بشرب الماء، وقد يحتاج الرياضي إلى الكربوهيدرات في الأنشطة الطويلة."
-  },
-  {
-    x: 8.9,
-    title: "بعد النشاط",
-    desc: "تناول البروتين لدعم إصلاح العضلات، والكربوهيدرات لتعويض مخزون الجليكوجين."
-  }
-];
-
-for (const item of timing) {
-  slide6.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 2.35,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.4 },
-    fill: { color: C.white }
-  });
-
-  addText(slide6, item.title, item.x + 0.1, 3.35, 3.35, 0.5, {
-    fontSize: 22,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide6, item.desc, item.x + 0.2, 4.05, 3.15, 1.0, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid",
-    breakLine: true,
-    margin: 0.1
-  });
-}
-
-// خلاصة
-addText(
-  slide6,
-  "التغذية المناسبة في الوقت المناسب تساعد على تحسين الأداء وتسريع الاستشفاء.",
-  1.0, 5.85, 11.2, 0.6,
-  {
-    fontSize: 19,
-    bold: true,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  }
-);
-
-// التذييل
-addText(slide6, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة السابعة: التغذية والاستشفاء العضلي
-// ==============================
-
-const slide7 = pptx.addSlide();
-
-slide7.background = { color: C.white };
-
-// الشريط العلوي
-slide7.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide7, "07", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide7, "التغذية والاستشفاء العضلي", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide7,
-  "تؤدي التغذية دورًا مهمًا في تعافي الجسم بعد المجهود البدني، والمساعدة على إصلاح الأنسجة واستعادة الطاقة.",
-  1.0, 1.55, 11.2, 0.85,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// عناصر الاستشفاء
-const recovery = [
-  {
-    x: 0.8,
-    title: "البروتين",
-    desc: "يساعد على إصلاح الأنسجة العضلية ودعم عملية بناء العضلات."
-  },
-  {
-    x: 4.85,
-    title: "الكربوهيدرات",
-    desc: "تساهم في تعويض مخزون الجليكوجين واستعادة الطاقة."
-  },
-  {
-    x: 8.9,
-    title: "الراحة والنوم",
-    desc: "يساعدان الجسم على التعافي والتكيف مع التدريب."
-  }
-];
-
-for (const item of recovery) {
-  slide7.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 2.0,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.3 },
-    fill: { color: C.pale }
-  });
-
-  addText(slide7, item.title, item.x + 0.1, 3.35, 3.35, 0.45, {
-    fontSize: 21,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide7, item.desc, item.x + 0.2, 4.0, 3.15, 0.7, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// خلاصة
-addText(
-  slide7,
-  "الاستشفاء الجيد لا يعتمد على الغذاء وحده، بل على تكامل التغذية والترطيب والراحة والنوم.",
-  1.0, 5.65, 11.2, 0.75,
-  {
-    fontSize: 19,
-    bold: true,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  }
-);
-
-// التذييل
-addText(slide7, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الثامنة: الأخطاء الغذائية الشائعة
-// ==============================
-
-const slide8 = pptx.addSlide();
-
-slide8.background = { color: C.pale };
-
-// الشريط العلوي
-slide8.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide8, "08", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide8, "الأخطاء الغذائية الشائعة لدى الرياضيين", 2.0, 0.55, 10.5, 0.8, {
-  fontSize: 28,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide8,
-  "قد تؤثر بعض العادات الغذائية غير الصحيحة سلبًا على الأداء الرياضي وصحة الجسم.",
-  1.0, 1.5, 11.2, 0.7,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// الأخطاء
-const mistakes = [
-  {
-    x: 0.8, y: 2.65,
-    title: "إهمال وجبة الإفطار",
-    desc: "قد يؤدي إلى نقص الطاقة والتركيز."
-  },
-  {
-    x: 4.85, y: 2.65,
-    title: "قلة شرب الماء",
-    desc: "تزيد من احتمالية الجفاف وانخفاض الأداء."
-  },
-  {
-    x: 8.9, y: 2.65,
-    title: "الإفراط في المكملات",
-    desc: "استخدامها دون حاجة أو إرشاد متخصص."
-  },
-  {
-    x: 2.8, y: 4.65,
-    title: "الاعتماد على نوع واحد من الغذاء",
-    desc: "يقلل تنوع العناصر الغذائية التي يحتاجها الجسم."
-  },
-  {
-    x: 6.85, y: 4.65,
-    title: "تناول الطعام في توقيت غير مناسب",
-    desc: "قد يؤثر على الراحة والأداء أثناء التدريب."
-  }
-];
-
-for (const item of mistakes) {
-  slide8.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: item.y,
-    w: 3.55,
-    h: 1.45,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.2 },
-    fill: { color: C.white }
-  });
-
-  addText(slide8, item.title, item.x + 0.1, item.y + 0.2, 3.35, 0.4, {
-    fontSize: 17,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide8, item.desc, item.x + 0.2, item.y + 0.7, 3.15, 0.55, {
-    fontSize: 14,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// التذييل
-addText(slide8, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة التاسعة: علاقة التغذية بالأداء الرياضي
-// ==============================
-
-const slide9 = pptx.addSlide();
-
-slide9.background = { color: C.white };
-
-// الشريط العلوي
-slide9.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide9, "09", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide9, "علاقة التغذية بالأداء الرياضي", 2.2, 0.55, 10.3, 0.8, {
-  fontSize: 30,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide9,
-  "تؤثر التغذية المتوازنة بصورة مباشرة في قدرة الرياضي على أداء التمارين بكفاءة والمحافظة على مستوى بدني جيد.",
-  1.0, 1.5, 11.2, 0.8,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// عناصر الأداء
-const performance = [
-  {
-    x: 0.8,
-    title: "القوة العضلية",
-    desc: "توفير الطاقة والعناصر اللازمة لدعم عمل العضلات."
-  },
-  {
-    x: 4.85,
-    title: "التحمل البدني",
-    desc: "المساعدة على استمرار النشاط وتقليل التعب المبكر."
-  },
-  {
-    x: 8.9,
-    title: "التركيز وسرعة الاستجابة",
-    desc: "دعم وظائف الدماغ والانتباه أثناء النشاط الرياضي."
-  }
-];
-
-for (const item of performance) {
-  slide9.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 2.0,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.3 },
-    fill: { color: C.pale }
-  });
-
-  addText(slide9, item.title, item.x + 0.1, 3.35, 3.35, 0.5, {
-    fontSize: 19,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide9, item.desc, item.x + 0.2, 4.0, 3.15, 0.7, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// خلاصة
-addText(
-  slide9,
-  "كلما كانت التغذية مناسبة لاحتياجات الرياضي، زادت فرص تحسين الأداء والمحافظة على الصحة.",
-  1.0, 5.65, 11.2, 0.7,
-  {
-    fontSize: 19,
-    bold: true,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  }
-);
-
-// التذييل
-addText(slide9, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة العاشرة: دور معلم التربية البدنية
-// ==============================
-
-const slide10 = pptx.addSlide();
-
-slide10.background = { color: C.pale };
-
-// الشريط العلوي
-slide10.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide10, "10", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide10, "دور معلم التربية البدنية في التوعية الغذائية", 1.5, 0.55, 11, 0.8, {
-  fontSize: 27,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide10,
-  "لا يقتصر دور معلم التربية البدنية على تعليم المهارات والتمارين، بل يمتد إلى تعزيز السلوكيات الصحية لدى الطلاب.",
-  1.0, 1.55, 11.2, 0.85,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// الأدوار
-const teacherRoles = [
-  {
-    x: 0.8,
-    title: "نشر الوعي الغذائي",
-    desc: "توضيح أهمية الغذاء المتوازن للطلاب والرياضيين."
-  },
-  {
-    x: 4.85,
-    title: "تشجيع العادات الصحية",
-    desc: "تعزيز شرب الماء وتناول الوجبات المتوازنة."
-  },
-  {
-    x: 8.9,
-    title: "توجيه الطلاب",
-    desc: "تشجيعهم على اتباع أساليب صحية تناسب نشاطهم."
-  }
-];
-
-for (const item of teacherRoles) {
-  slide10.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 2.0,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.3 },
-    fill: { color: C.white }
-  });
-
-  addText(slide10, item.title, item.x + 0.1, 3.35, 3.35, 0.5, {
-    fontSize: 19,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide10, item.desc, item.x + 0.2, 4.0, 3.15, 0.7, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// خلاصة
-addText(
-  slide10,
-  "المعلم الواعي يسهم في بناء جيل أكثر صحة ونشاطًا من خلال التوجيه والتثقيف.",
-  1.0, 5.65, 11.2, 0.7,
-  {
-    fontSize: 19,
-    bold: true,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  }
-);
-
-// التذييل
-addText(slide10, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});
-// ==============================
-// الشريحة الحادية عشرة: وجبة غذائية متوازنة
-// ==============================
-
-const slide11 = pptx.addSlide();
-
-slide11.background = { color: C.white };
-
-// الشريط العلوي
-slide11.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide11, "11", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide11, "مثال عملي لوجبة غذائية متوازنة للرياضي", 1.5, 0.55, 11, 0.8, {
-  fontSize: 28,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide11,
-  "يمكن تكوين وجبة متوازنة من مجموعة متنوعة من الأطعمة التي توفر العناصر الغذائية الأساسية.",
-  1.0, 1.5, 11.2, 0.75,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// مكونات الوجبة
-const meal = [
-  {
-    x: 0.8,
-    title: "الأرز",
-    desc: "مصدر للكربوهيدرات والطاقة."
-  },
-  {
-    x: 4.85,
-    title: "الدجاج",
-    desc: "مصدر للبروتين ودعم إصلاح العضلات."
-  },
-  {
-    x: 8.9,
-    title: "الخضروات",
-    desc: "توفر الفيتامينات والمعادن والألياف."
-  }
-];
-
-for (const item of meal) {
-  slide11.addShape(pptx.ShapeType.roundRect, {
-    x: item.x,
-    y: 3.0,
-    w: 3.55,
-    h: 1.8,
-    rectRadius: 0.12,
-    line: { color: C.cyan, width: 1.3 },
-    fill: { color: C.pale }
-  });
-
-  addText(slide11, item.title, item.x + 0.1, 3.35, 3.35, 0.45, {
-    fontSize: 21,
-    bold: true,
-    color: C.blue,
-    align: "center"
-  });
-
-  addText(slide11, item.desc, item.x + 0.2, 4.0, 3.15, 0.55, {
-    fontSize: 15,
-    color: C.navy,
-    align: "center",
-    valign: "mid"
-  });
-}
-
-// الماء
-slide11.addShape(pptx.ShapeType.roundRect, {
-  x: 4.35,
-  y: 5.15,
-  w: 4.6,
-  h: 0.9,
-  rectRadius: 0.12,
-  line: { color: C.cyan, width: 1.3 },
-  fill: { color: C.pale }
-});
-
-addText(slide11, "الماء: عنصر أساسي للحفاظ على الترطيب وتوازن السوائل.", 4.5, 5.4, 4.3, 0.4, {
-  fontSize: 16,
-  bold: true,
-  color: C.blue,
-  align: "center"
-});
-
-    // ==============================
-// الشريحة الثانية عشرة: التوصيات والإرشادات الغذائية
-// ==============================
-
-const slide12 = pptx.addSlide();
-
-slide12.background = { color: C.pale };
-
-// الشريط العلوي
-slide12.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.cyan, transparency: 100 },
-  fill: { color: C.cyan }
-});
-
-// رقم الشريحة
-addText(slide12, "12", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.blue
-});
-
-// العنوان
-addText(slide12, "التوصيات والإرشادات الغذائية للرياضيين", 1.5, 0.55, 11, 0.8, {
-  fontSize: 28,
-  bold: true,
-  color: C.navy,
-  align: "right"
-});
-
-// مقدمة
-addText(
-  slide12,
-  "لتحقيق أفضل استفادة من النشاط البدني، يُنصح باتباع مجموعة من الإرشادات الغذائية:",
-  1.0, 1.5, 11.2, 0.7,
-  {
-    fontSize: 20,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  }
-);
-
-// التوصيات
-const recommendations = [
-  "اتباع نظام غذائي متوازن ومتنوع.",
-  "تناول وجبات مناسبة لاحتياجات الجسم.",
-  "الاهتمام بشرب الماء قبل النشاط وأثناءه وبعده.",
-  "تنظيم توقيت الوجبات بما يتناسب مع التدريب.",
-  "الحرص على تناول مصادر البروتين والكربوهيدرات.",
-  "تجنب استخدام المكملات الغذائية دون استشارة مختص.",
-  "الحصول على قسط كافٍ من الراحة والنوم."
-];
-
-recommendations.forEach((item, index) => {
-  const y = 2.45 + index * 0.58;
-
-  slide12.addShape(pptx.ShapeType.ellipse, {
-    x: 1.15,
-    y: y + 0.08,
-    w: 0.28,
-    h: 0.28,
-    line: { color: C.gold, transparency: 100 },
-    fill: { color: C.gold }
-  });
-
-  addText(slide12, item, 1.65, y, 10.0, 0.45, {
-    fontSize: 17,
-    color: C.navy,
-    align: "right",
-    valign: "mid"
-  });
-});
-
-// التذييل
-addText(slide12, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.blue
-});;
-// ==============================
-// الشريحة الثالثة عشرة: الخاتمة والشكر
-// ==============================
-
-const slide13 = pptx.addSlide();
-
-slide13.background = { color: C.navy };
-
-// شريط علوي
-slide13.addShape(pptx.ShapeType.rect, {
-  x: 0, y: 0, w: SW, h: 0.16,
-  line: { color: C.gold, transparency: 100 },
-  fill: { color: C.gold }
-});
-
-// رقم الشريحة
-addText(slide13, "13", 0.55, 0.45, 1, 0.5, {
-  fontSize: 22,
-  bold: true,
-  color: C.white
-});
-
-// عنوان الخاتمة
-addText(slide13, "الخاتمة", 2.0, 0.85, 9.3, 0.8, {
-  fontSize: 34,
-  bold: true,
-  color: C.gold,
-  align: "center"
-});
-
-// نص الخاتمة
-addText(
-  slide13,
-  "إن تحقيق الأداء الرياضي المتميز لا يعتمد على التدريب وحده، بل يتطلب تكامل التغذية المتوازنة والترطيب الجيد والراحة والاستشفاء.",
-  1.3, 2.0, 10.7, 1.4,
-  {
-    fontSize: 23,
-    bold: true,
-    color: C.white,
-    align: "center",
-    valign: "mid",
-    margin: 0.15
-  }
-);
-
-// عبارة ختامية
-addText(
-  slide13,
-  "التغذية السليمة أساس الأداء الأفضل والحياة الصحية.",
-  1.5, 3.85, 10.3, 0.7,
-  {
-    fontSize: 21,
-    color: C.cyan,
-    bold: true,
-    align: "center"
-  }
-);
-
-// خط زخرفي
-slide13.addShape(pptx.ShapeType.line, {
-  x: 4.0,
-  y: 5.0,
-  w: 5.3,
-  h: 0,
-  line: { color: C.gold, width: 2 }
-});
-
-// الشكر
-addText(
-  slide13,
-  "شكرًا لحُسن استماعكم",
-  1.5, 5.35, 10.3, 0.9,
-  {
-    fontSize: 32,
-    bold: true,
-    color: C.white,
-    align: "center"
-  }
-);
-
-// التذييل
-addText(slide13, "التغذية الرياضية والأداء الرياضي | 2026", 0.6, 7.05, 6, 0.2, {
-  fontSize: 10,
-  color: C.white
-});
-async function buildPresentation() {
-  await pptx.writeFile({
-    fileName: "Sports-Nutrition.pptx"
-  });
-
-  console.log("Presentation created successfully!");
-}
-
-buildPresentation().catch(console.error);
