@@ -1,6 +1,167 @@
-color: C.blue, transparency: 76 },
-    line: { color: C.blue, transparency: 100 }
+const pptxgen = require("pptxgenjs");
+const path = require("path");
+const fs = require("fs");
+
+const pptx = new pptxgen();
+
+pptx.layout = "LAYOUT_WIDE";
+pptx.author = "جامعة صبراتة";
+pptx.subject = "التغذية الرياضية والأداء الرياضي";
+pptx.title = "التغذية الرياضية والأداء الرياضي";
+pptx.lang = "ar-LY";
+
+pptx.theme = {
+  headFontFace: "Arial",
+  bodyFontFace: "Arial",
+  lang: "ar-LY"
+};
+
+const SW = 13.333;
+const SH = 7.5;
+const assets = path.join(__dirname, "assets");
+
+const C = {
+  navy: "10263F",
+  navy2: "173B55",
+  blue: "087EA4",
+  cyan: "35B6D6",
+  aqua: "DDF4F8",
+  pale: "F3F9FC",
+  white: "FFFFFF",
+  gold: "D6B46A",
+  gray: "6E8492",
+  light: "D7E6EC",
+  green: "4B9B83",
+  orange: "E5A34B",
+  red: "C96C68",
+  ink: "203747"
+};
+
+function txt(slide, text, x, y, w, h, opt = {}) {
+  slide.addText(text, {
+    x, y, w, h,
+    fontFace: "Arial",
+    fontSize: 18,
+    color: C.ink,
+    margin: 0.06,
+    breakLine: false,
+    valign: "mid",
+    fit: "shrink",
+    ...opt
   });
+}
+
+function shape(slide, type, x, y, w, h, fill, lineColor = fill, extra = {}) {
+  slide.addShape(type, {
+    x, y, w, h,
+    fill: { color: fill },
+    line: {
+      color: lineColor,
+      transparency: lineColor === fill ? 100 : 0,
+      width: 1
+    },
+    ...extra
+  });
+}
+
+function line(slide, x1, y1, x2, y2, color = C.light, width = 1.2, dash) {
+  slide.addShape(pptx.ShapeType.line, {
+    x: x1,
+    y: y1,
+    w: x2 - x1,
+    h: y2 - y1,
+    line: {
+      color,
+      width,
+      ...(dash ? { dashType: dash } : {})
+    }
+  });
+}
+
+function imageIf(slide, name, x, y, w, h, sizing = "contain") {
+  const p = path.join(assets, name);
+
+  if (!fs.existsSync(p)) {
+    console.warn("Image not found:", p);
+    return;
+  }
+
+  slide.addImage({ path: p, x, y, w, h, sizing });
+}
+
+function topBand(slide, color = C.cyan) {
+  shape(slide, pptx.ShapeType.rect, 0, 0, SW, 0.13, color);
+}
+
+function footer(slide, n, dark = false) {
+  const color = dark ? "D9E8EF" : C.gray;
+
+  line(slide, 0.55, 6.92, 12.78, 6.92,
+    dark ? "426176" : C.light, 0.7);
+
+  txt(slide,
+    "التغذية الرياضية والأداء الرياضي  |  جامعة صبراتة  |  2026",
+    0.65, 7.02, 8.4, 0.22,
+    { fontSize: 9, color, align: "left" }
+  );
+
+  txt(slide, String(n).padStart(2, "0"),
+    12.05, 6.99, 0.65, 0.28,
+    {
+      fontSize: 11,
+      bold: true,
+      color: dark ? C.gold : C.blue,
+      align: "right"
+    }
+  );
+}
+
+function heading(slide, n, title, subtitle = "", dark = false) {
+  const main = dark ? C.white : C.navy;
+  const sub = dark ? "D6E5EC" : C.gray;
+
+  txt(slide, String(n).padStart(2, "0"),
+    0.62, 0.43, 0.75, 0.38,
+    { fontSize: 15, bold: true, color: C.gold, align: "left" }
+  );
+
+  txt(slide, title, 1.55, 0.38, 11.1, 0.65,
+    { fontSize: 28, bold: true, color: main, align: "right" }
+  );
+
+  shape(slide, pptx.ShapeType.rect,
+    10.7, 1.15, 1.95, 0.045, C.gold);
+
+  if (subtitle) {
+    txt(slide, subtitle, 1.0, 1.35, 11.65, 0.55,
+      { fontSize: 16, color: sub, align: "right" }
+    );
+  }
+}
+
+function dot(slide, x, y, r, color) {
+  shape(slide, pptx.ShapeType.ellipse, x, y, r, r, color);
+}
+
+// ==============================
+// 01 — الغلاف
+// ==============================
+
+{
+  const s = pptx.addSlide();
+  s.background = { color: C.navy };
+
+  shape(s, pptx.ShapeType.rect, 0, 0, SW, 0.14, C.cyan);
+
+  shape(s, pptx.ShapeType.ellipse,
+    8.15, -0.65, 6.2, 7.7, C.navy2);
+
+  shape(s, pptx.ShapeType.ellipse,
+    -1.8, 5.7, 5.0, 3.0, C.blue, C.blue, {
+      fill: { color: C.blue, transparency: 76 },
+      line: { color: C.blue, transparency: 100 }
+    }
+  );
 
   const logos = [
     ["IMG_4947.png", 0.75],
@@ -86,11 +247,6 @@ color: C.blue, transparency: 76 },
   txt(s, "خلال هذه الندوة سنتعرّف كيف نختار الغذاء المناسب، ومتى نتناوله، وكيف ينعكس ذلك على الأداء.",
     1.0, 5.85, 11.4, 0.55, { fontSize: 17, color: "D7E6EC", align: "center" });
   footer(s, 2, true);
-}
-1.0, 6.15, 11.2, 0.35, {
-      fontSize: 12, color: C.gray, align: "center"
-    });
-  footer(s, 5);
 }
 
 // 03 — مفهوم التغذية الرياضية
@@ -593,7 +749,7 @@ color: C.blue, transparency: 76 },
     ["01", "نوّع غذاءك", "احرص على تناول وجبات متوازنة ومتنوعة.", C.cyan],
     ["02", "اهتم بالترطيب", "اشرب الماء بانتظام قبل النشاط وأثناءه وبعده.", C.gold],
     ["03", "نظّم وجباتك", "اختر توقيتاً مناسباً للوجبات حول التمرين.", C.green],
-    ["04", "امنح جسمك الراحة", "اهتم بالنوم الكافي والتعافي بعد الجهد.", "A9A9F5],
+    ["04", "امنح جسمك الراحة", "اهتم بالنوم الكافي والتعافي بعد الجهد.", "A9A9F5"],
     ["05", "كن قدوة صحية", "شجّع الطلاب على اتباع عادات غذائية سليمة.", C.orange]
   ];
 
